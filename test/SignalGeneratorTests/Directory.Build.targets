@@ -1,0 +1,9 @@
+<Project>
+  <Import Project="$(RepoRoot)Directory.Build.targets"/>
+  <ItemDefinitionGroup Label="SignalGeneratorTests">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(RepoRoot)src/SignalGenerator/;$(RepoRoot)src/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SIGNALGENERATOR_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

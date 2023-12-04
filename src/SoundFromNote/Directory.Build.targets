@@ -1,0 +1,9 @@
+<Project>
+  <Import Project="$(RepoRoot)Directory.Build.targets"/>
+  <ItemDefinitionGroup Label="SoundFromNote">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(RepoRoot)src/SignalGenerator/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SOUNDFROMNOTE_EXPORTS;SIGNALGENERATOR_IMPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+</Project>

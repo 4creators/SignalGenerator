@@ -1,0 +1,12 @@
+<Project>
+  <Import Project="$(RepoRoot)Directory.Build.targets"/>
+  <ItemDefinitionGroup Label="SignalGeneratorVisualizer">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(RepoRoot)src/SoundFromNote/;$(RepoRoot)src/SignalGenerator/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SOUNDFROMNOTE_IMPORTS;SIGNALGENERATOR_IMPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>SignalGenerator.lib;SoundFromNote.lib;fftw3.lib;matplot.lib;nodesoup.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>  
+</Project>
