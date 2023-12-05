@@ -80,6 +80,11 @@ namespace DevnetZone
             return m_sampleInterval;
         }
 
+        SIGNALGENERATOR_API float128 SampleRate()
+        {
+            return m_sampleRate;
+        }
+
         SIGNALGENERATOR_API const std::function<double(double)>& WaveFunction() const
         {
             return m_waveFunction;
@@ -88,10 +93,10 @@ namespace DevnetZone
         SIGNALGENERATOR_API void SetWaveFunction(std::function<double(double)>& waveFunction)
         {
             auto* functionPtr = waveFunction.target<double(*)(double)>();
-            if (functionPtr)
+            if (functionPtr && *functionPtr)
             {
                 auto* defaultPtr = m_waveFunction.target<double(*)(double)>();
-                if (functionPtr != defaultPtr)
+                if (!defaultPtr || *functionPtr != *defaultPtr)
                     m_waveFunction = waveFunction;
             }
         }
@@ -104,10 +109,10 @@ namespace DevnetZone
         SIGNALGENERATOR_API void SetDefaultWaveFunction(std::function<double(double)>& waveFunction)
         {
             auto* functionPtr = waveFunction.target<double(*)(double)>();
-            if (functionPtr)
+            if (functionPtr && *functionPtr)
             {
                 auto* defaultPtr = m_defaultFunction.target<double(*)(double)>();
-                if (functionPtr != defaultPtr)
+                if (*functionPtr != *defaultPtr)
                     m_defaultFunction = waveFunction;
             }
         }
@@ -118,10 +123,10 @@ namespace DevnetZone
             Failed = 0x8000000000000000,
             OutOfMemoryError = Failed | (1 << 0),
             FrequencyOutOfRange = Failed | (1 << 1),
-            DurationOutOfRange = Failed & (1 << 2),
-            SampleRateOutOfRange = Failed & (1 << 3),
-            GainOutOfRange = Failed & (1 << 4),
-            NumberOfChannelsOutOfRange = Failed & (1 << 5)
+            DurationOutOfRange = Failed | (1 << 2),
+            SampleRateOutOfRange = Failed | (1 << 3),
+            GainOutOfRange = Failed | (1 << 4),
+            NumberOfChannelsOutOfRange = Failed | (1 << 5)
         };
 
         SIGNALGENERATOR_API ReturnCode LastGeneratorCallResult() const
@@ -129,10 +134,25 @@ namespace DevnetZone
             return m_lastGeneratorCallResult;
         }
 
+        SIGNALGENERATOR_API bool LastGeneratorCallSuccess() const
+        {
+            return !((uint64_t)m_lastGeneratorCallResult & (uint64_t)ReturnCode::Failed);
+        }
+
+        SIGNALGENERATOR_API bool IsError(uint64_t errorCode)
+        {
+            return (bool)((uint64_t)m_lastGeneratorCallResult & (errorCode & 0x7fffffffffffff));
+        };
+
     protected:
         // If we want to preserve continuity while generating signal in consecutive
         // calls to GenerateWaveformSamples we need to preserve some additionl context
         // to determine phase of last generated sample
+        float128 m_sampleRate = 0.0;
+        float128 m_signalFrequency = 0.0;
+        float128 m_signalDuration = 0.0;
+        float128 m_signalGain = 0.0;
+        uint32_t m_numberOfChannels = 0;
         float128 m_maxInputValue = 0.0;
         float128 m_samplesCountDouble = 0.0;
         float128 m_sampleInterval = 0.0;
