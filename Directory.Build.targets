@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Label="Compiler and Linker Settings">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RepoRoot)src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(VcpkgInstalledDir)$(Platform)-$(VcpkgOSTarget)\include\;$(RepoRoot)src\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <LanguageStandard>stdcpplatest</LanguageStandard>
@@ -25,7 +25,9 @@
       <LinkIncremental>true</LinkIncremental>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories >$(OutDir)lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="$(Configuration) == 'Debug'" >$(VcpkgInstalledDir)$(Platform)-$(VcpkgOSTarget)\$(Configuration)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories Condition="$(Configuration) != 'Debug'" >$(VcpkgInstalledDir)$(Platform)-$(VcpkgOSTarget)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
       <LargeAddressAware>true</LargeAddressAware>
     </Link>

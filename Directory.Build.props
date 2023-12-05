@@ -25,6 +25,7 @@
     <VcpkgEnableManifest Condition="'$(VcpkgEnableManifest)' == ''">true</VcpkgEnableManifest>
     <VcpkgManifestInstall Condition="'$(VcpkgManifestInstall)' == ''">true</VcpkgManifestInstall>
     <VcpkgManifestRoot>$(RepoRoot)deps\</VcpkgManifestRoot>
-    <VcpkgInstalledDir>$(RepoRoot)deps\vcpkg-installed\</VcpkgInstalledDir>
+    <VcpkgManifestDirectory>$(RepoRoot)deps\</VcpkgManifestDirectory>
+    <VcpkgInstalledDir>$(RepoRoot)deps\vcpkg_installed\</VcpkgInstalledDir>
   </PropertyGroup>
 </Project>
