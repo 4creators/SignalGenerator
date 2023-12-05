@@ -133,6 +133,14 @@
     <None Include="Directory.Build.props" />
     <None Include="Directory.Build.targets" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SignalGenerator\SignalGenerator.vcxproj">
+      <Project>{02e55d7c-71ea-4ed5-8c09-d5f674fa04c1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\SoundFromNote\SoundFromNote.vcxproj">
+      <Project>{f04323ef-8214-42ee-9185-7a7608ce1b4f}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

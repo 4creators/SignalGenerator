@@ -4,16 +4,21 @@
 // SPDX-License-Identifier: MIT
 //
 
+#ifndef SIGNALGENERATORVISUALIZER_H
+#define SIGNALGENERATORVISUALIZER_H
+
 #pragma once
 
-void PlotWaveformSpectrogramFftw(DevnetZone::SignalGenerator& gen, double* buffer);
+static void PlotWaveformSpectrogramFftw(DevnetZone::SignalGenerator& gen, double* buffer);
 
 static void PlotFftComplexOutput(DevnetZone::SignalGenerator& gen, fftw_complex* fftBuffer);
 
-void PrintScaleFrequencyRange();
+static void PrintScaleFrequencyRange();
 
 static void PrintNotes();
 
-static fftw_complex* GetDftFromReal(int64_t size, double* buffer);
+static fftw_complex* GetDftFromReal(uint64_t size, double* buffer);
 
-static void PlotWaveformSpectrogramKissfft(DevnetZone::SignalGenerator& gen, double* buffer);
+static void GetDftXAxisFrequencies(DevnetZone::SignalGenerator& gen, uint64_t samplesCount, std::vector<double>& xAxisValues);
+
+#endif // SIGNALGENERATORVISUALIZER_H

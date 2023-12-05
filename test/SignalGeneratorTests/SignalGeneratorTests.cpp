@@ -15,12 +15,10 @@ namespace DevnetZone
     protected:
         void SetUp() override 
         {
-            // g0_ remains in default state
         }
 
         void TearDown() override 
         {
-            // nothing to do
         }
 
         SignalGenerator g0_;
@@ -37,7 +35,7 @@ namespace DevnetZone
         EXPECT_EQ(*sinPtr2, (double(*)(double)) & std::sin);
     }
 
-    TEST_F(SignalGeneratorTest, SetDefaultWaveFunction_ArgumentCannotPointToNullptr) 
+    TEST_F(SignalGeneratorTest, SetDefaultWaveFunction_ArgumentCannotBeNullptr) 
     {
         std::function<double(double)> nullFunction{ (double(*)(double)) nullptr };
         g0_.SetDefaultWaveFunction(nullFunction);
@@ -55,6 +53,50 @@ namespace DevnetZone
 
         auto* targetFunc = g0_.DefaultWaveFunction().target<double(*)(double)>();
         EXPECT_EQ(*targetFunc, (double(*)(double)) & std::cos);
+    }
+
+    TEST_F(SignalGeneratorTest, SettWaveFunction_FunctionIsSet)
+    {
+        // Check precondition
+        auto* initialFuncValue = g0_.WaveFunction().target<double(*)(double)>();
+        EXPECT_FALSE(initialFuncValue);
+
+        std::function<double(double)> cosFunction = (double(*)(double)) & std::cos;
+        g0_.SetWaveFunction(cosFunction);
+
+        auto* targetFunc = g0_.WaveFunction().target<double(*)(double)>();
+        EXPECT_EQ(*targetFunc, (double(*)(double)) & std::cos);
+    }
+
+    TEST_F(SignalGeneratorTest, SettWaveFunction_ArgumentCannotBeNullptr)
+    {
+        std::function<double(double)> cosFunction = (double(*)(double)) & std::cos;
+        g0_.SetWaveFunction(cosFunction);
+
+        auto* targetFunc = g0_.WaveFunction().target<double(*)(double)>();
+        EXPECT_EQ(*targetFunc, (double(*)(double)) & std::cos);
+
+        std::function<double(double)> nullFunction{ (double(*)(double)) nullptr };
+        g0_.SetWaveFunction(nullFunction);
+
+        targetFunc = g0_.WaveFunction().target<double(*)(double)>();
+        auto* targetNullFunction = nullFunction.target<double(*)(double)>();
+        EXPECT_TRUE(*targetFunc);
+        EXPECT_FALSE(targetNullFunction);
+    }
+
+    TEST_F(SignalGeneratorTest, GenerateWaveformSamples_DataContractErrors)
+    {
+        double* buffer = g0_.GenerateWaveformSamples(nullptr, 0, -1, -1, -1, -0.5);
+        EXPECT_FALSE(buffer);
+
+        EXPECT_FALSE(g0_.LastGeneratorCallSuccess());
+        EXPECT_TRUE(g0_.IsError(SignalGenerator::FrequencyOutOfRange));
+        EXPECT_TRUE(g0_.IsError(SignalGenerator::NumberOfChannelsOutOfRange));
+        EXPECT_TRUE(g0_.IsError(SignalGenerator::DurationOutOfRange));
+        EXPECT_TRUE(g0_.IsError(SignalGenerator::SampleRateOutOfRange));
+        EXPECT_TRUE(g0_.IsError(SignalGenerator::GainOutOfRange));
+        EXPECT_FALSE(g0_.IsError(SignalGenerator::OutOfMemoryError));
     }
 }
 

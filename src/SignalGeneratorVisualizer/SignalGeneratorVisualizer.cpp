@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <matplot/matplot.h>
-#include "fftw3.h"
+#include <fftw3.h>
 #include "SignalFunctions.h"
 #include "SignalGenerator.h"
 #include "Scale.h"
@@ -20,12 +20,13 @@ using namespace DevnetZone;
 
 int main() 
 {
-    PrintScaleFrequencyRange();
+    //PrintScaleFrequencyRange();
 
-    PrintNotes();
+    //PrintNotes();
 
     SignalGenerator gen;
-    gen.SetDefaultWaveFunction(&SignalFunctions::SawToothRev);
+    std::function<double(double)> func{ SignalFunctions::SawToothRev };
+    gen.SetDefaultWaveFunction(func);
     double* buffer = gen.GenerateWaveformSamples(1, 880, 0.1, 20480, 1.0);
 
     PlotWaveformSpectrogramFftw(gen, buffer);
@@ -60,7 +61,7 @@ static void PrintNotes()
         print_key_value(key, value);
 }
 
-static fftw_complex* GetDftFromReal(int64_t size, double* buffer)
+static fftw_complex* GetDftFromReal(uint64_t size, double* buffer)
 {
     if (buffer)
     {
@@ -83,6 +84,13 @@ static fftw_complex* GetDftFromReal(int64_t size, double* buffer)
     return nullptr;
 }
 
+void GetDftXAxisFrequencies(DevnetZone::SignalGenerator& gen, uint64_t samplesCount, std::vector<double>& xAxisValues)
+{
+    double sampleFrequency = gen.SampleRate().convert_to<double>();
+    for (uint64_t k = 0; k < samplesCount; k++)
+        xAxisValues[k] = ((double)k) / samplesCount * sampleFrequency / 2;
+}
+
 static void PlotWaveformSpectrogramFftw(DevnetZone::SignalGenerator& gen, double* buffer)
 {
     fftw_complex* fftBuffer = GetDftFromReal(gen.SamplesCount(), buffer);
@@ -94,26 +102,36 @@ static void PlotWaveformSpectrogramFftw(DevnetZone::SignalGenerator& gen, double
 
 void PlotFftComplexOutput(DevnetZone::SignalGenerator& gen, fftw_complex* fftBuffer)
 {
-    // Copy real fft part to input buffer - correct for 
-    // complex double size difference
-    int64_t fftSize = gen.SamplesCount() / 2 + 1;
+    uint64_t fftSize = gen.SamplesCount() / 2 + 1;
 
     double* plotBuffer = (double*)malloc(fftSize * sizeof(double));
 
     if (plotBuffer)
     {
-        double* fftBuffDouble = (double*)fftBuffer;
-        for (int i = 3, j = 0; j < fftSize - 2; i += 2, j++)
-            plotBuffer[j] = abs(fftBuffDouble[i]) / fftSize; // copy real part and normalize
+        for (int i = 0; i < fftSize; i++)
+        {
+            double real = fftBuffer[i][0];
+            double img = fftBuffer[i][1];
+            plotBuffer[i] = 2 * sqrt(pow(real, 2) + pow(img, 2)) / gen.SamplesCount(); // normalize + magnitude
+        }
 
-        int64_t dataPoints = fftSize - 2;
+        double* endPlotBuff = plotBuffer + fftSize;
 
-        double* endPlotBuff = plotBuffer + dataPoints;
+        std::vector<double> x(fftSize);
+        std::vector<double> ticksX = 
+        { 
+            0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 100000,
+            //11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 200000,
+        };
 
-        std::vector<double> x = linspace(0, dataPoints, dataPoints);
+        GetDftXAxisFrequencies(gen, fftSize, x);
+
         std::vector<double> y(plotBuffer, endPlotBuff);
 
         plot(x, y);
+        axis(tight);
+        xticks(ticksX);
+
         show();
 
         free(plotBuffer);
