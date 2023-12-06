@@ -3,7 +3,10 @@
   <ItemDefinitionGroup Label="SignalGeneratorTests">
     <ClCompile>
       <AdditionalIncludeDirectories>$(RepoRoot)src/SignalGenerator/;$(RepoRoot)src/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>SIGNALGENERATOR_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SOUNDFROMNOTE_IMPORTS;SIGNALGENERATOR_IMPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>SignalGenerator.lib;SoundFromNote.lib;gmock.lib;gtest.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
 </Project>

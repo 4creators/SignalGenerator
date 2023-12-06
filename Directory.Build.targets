@@ -1,14 +1,15 @@
 <Project>
-  <PropertyGroup Label="VCProj general property overrides">
+  <PropertyGroup>
+    <!-- Nasty hack to help with vcxproj configuration -->
     <ProjectOsName Condition="'$(OS)' == 'Windows_NT'">win</ProjectOsName>
     <OutDir>$(RepoRoot)artifacts\$(ProjectOsName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(RepoRoot)artifacts\$(ProjectOsName)\$(Platform)\$(Configuration)\obj\$(MSBuildProjectName)\</IntDir>
     <TargetPath>$(OutDir)$(TargetName)$(TargetExt)</TargetPath>
     <DesktopDeployRecipeFile>$(IntDir)$(TargetName)$(TargetExt).recipe</DesktopDeployRecipeFile>
   </PropertyGroup>
-  <ItemDefinitionGroup Label="Compiler and Linker Settings">
+  <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RepoRoot)src\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(RepoRoot)src\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <LanguageStandard>stdcpplatest</LanguageStandard>
@@ -25,7 +26,7 @@
       <LinkIncremental>true</LinkIncremental>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories >$(OutDir)lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImportLibrary>$(OutDir)lib\$(TargetName).lib</ImportLibrary>
       <LargeAddressAware>true</LargeAddressAware>
     </Link>

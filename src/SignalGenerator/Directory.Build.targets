@@ -2,7 +2,7 @@
   <Import Project="$(RepoRoot)Directory.Build.targets"/>
   <ItemDefinitionGroup Label="SignalGenerator">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(RepoRoot)src/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SIGNALGENERATOR_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
