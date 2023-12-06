@@ -1,14 +1,14 @@
 <Project>
-  <PropertyGroup>
+  <PropertyGroup Label="Configuration">
     <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
     <ProjectOsName Condition="'$(OS)' == 'Windows_NT'">win</ProjectOsName>
     <OutDir>$(RepoRoot)artifacts\$(ProjectOsName)\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(RepoRoot)artifacts\$(ProjectOsName)\$(Platform)\$(Configuration)\obj\$(MSBuildProjectName)\</IntDir>
+    <TargetName>$(MSBuildProjectName)</TargetName>
     <TLogLocation>$(IntDir)</TLogLocation>
-    <TargetPath>$(OutDir)$(TargetName)$(TargetExt)</TargetPath>
-    <DesktopDeployRecipeFile>$(IntDir)$(TargetName)$(TargetExt).recipe</DesktopDeployRecipeFile>    
   </PropertyGroup>
-  <PropertyGroup Label="Visual Studio vcpkg configuration overrides">
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnabled>true</VcpkgEnabled>
     <VcpkgOSTarget Condition="'$(OS)' == 'Windows_NT'">windows</VcpkgOSTarget>
     <VcpkgUseStatic Condition="'$(VcpkgUseStatic)' == ''">false</VcpkgUseStatic>
     <VcpkgAutoLink Condition="'$(VcpkgAutoLink)' == ''">true</VcpkgAutoLink>
