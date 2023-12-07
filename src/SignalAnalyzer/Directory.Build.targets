@@ -1,0 +1,12 @@
+<Project>
+  <Import Project="$(RepoRoot)Directory.Build.targets"/>
+  <ItemDefinitionGroup Label="SignalGenerator">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(RepoRoot)src/SignalGenerator/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SIGNALANALYZER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>SignalGenerator.lib;SoundFromNote.lib;fftw3.lib;matplot.lib;nodesoup.lib;%(AdditionalDependencies)</AdditionalDependencies>      
+    </Link>
+  </ItemDefinitionGroup>
+</Project>
