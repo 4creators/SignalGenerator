@@ -1,0 +1,12 @@
+<Project>
+  <Import Project="$(RepoRoot)Directory.Build.targets"/>
+  <ItemDefinitionGroup Label="SignalAnalyzerTests">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(RepoRoot)src/SignalAnalyzer/;$(RepoRoot)src/SignalGenerator/;$(RepoRoot)src/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>SIGNALANALYZER_IMPORTS;SOUNDFROMNOTE_IMPORTS;SIGNALGENERATOR_IMPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>SignalAnalyzer.lib;SignalGenerator.lib;SoundFromNote.lib;gmock.lib;gtest.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

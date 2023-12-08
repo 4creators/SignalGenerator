@@ -1,0 +1,8 @@
+<Project>
+  <Import Project="../../Directory.Build.props"/>
+  <PropertyGroup Label="Configuration">
+    <!-- Nasty hack to help with debugging auto configuration -->
+    <TargetExt>.exe</TargetExt>
+    <TargetPath>$(OutDir)$(TargetName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+</Project>
